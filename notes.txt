@@ -1,0 +1,47 @@
+psql -h localhost -p 5432 -U postgres
+
+docker run --name posttest -d -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres
+
+
+
+# best example: https://citizen428.net/blog/asynchronous-notifications-in-postgres/
+
+
+works:
+
+
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  email TEXT NOT NULL,
+  total BIGINT NOT NULL
+);
+
+
+# function:
+
+CREATE OR REPLACE FUNCTION PUBLIC.NOTIFY() RETURNS trigger AS
+$BODY$
+BEGIN
+  PERFORM pg_notify('events', row_to_json(NEW)::text);
+  RETURN new;
+END;
+$BODY$
+LANGUAGE 'plpgsql' VOLATILE COST 100;
+
+
+# create trigger:
+
+CREATE TRIGGER notify_order_event
+AFTER INSERT OR UPDATE OR DELETE ON orders
+  FOR EACH ROW EXECUTE PROCEDURE notify_event();
+
+
+
+# add notify
+select pg_notify('events', 'user1 added');
+
+
+
+# python3
+sudo apt install python3-pip
+sudo apt-get install python3-psycopg2
