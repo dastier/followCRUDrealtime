@@ -2,7 +2,9 @@ psql -h localhost -p 5432 -U postgres
 
 docker run --name posttest -d -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres
 
+export DATABASE_URL="postgresql://postgres:mysecretpassword@localhost/dblog"
 
+CREATE DATABASE dblog;
 
 # best example: https://citizen428.net/blog/asynchronous-notifications-in-postgres/
 
@@ -45,3 +47,10 @@ select pg_notify('events', 'user1 added');
 # python3
 sudo apt install python3-pip
 sudo apt-get install python3-psycopg2
+
+
+# migrations:
+
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade

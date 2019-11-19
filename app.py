@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
+import listener
 
 app = Flask(__name__)
 
@@ -14,21 +15,37 @@ from models import Book
 def hello():
     return "Hello tier!"
 
+# @app.route("/add")
+# def add_book():
+#     name=request.args.get('name')
+#     author=request.args.get('author')
+#     published=request.args.get('published')
+    
+#     try:
+#         book=Book(
+#             name=name,
+#             author=author,
+#             published=published
+#         )
+#         db.session.add(book)
+#         db.session.commit()
+#         return "Book with name {} added. book id={}".format(name, book.id)
+#     except Exception as e:
+#         return(str(e))
+
 @app.route("/add")
-def add_book():
+def add_user():
     name=request.args.get('name')
-    author=request.args.get('author')
-    published=request.args.get('published')
+    # author=request.args.get('author')
+    # published=request.args.get('published')
     
     try:
         book=Book(
-            name=name,
-            author=author,
-            published=published
+            name=name
         )
         db.session.add(book)
         db.session.commit()
-        return "Book with name {} added. book id={}".format(name, book.id)
+        return "User with name {} added. user id={}".format(name, book.id)
     except Exception as e:
         return(str(e))
 
@@ -48,27 +65,27 @@ def get_by_id(id_):
     except Exception as e:
 	    return(str(e))
 
-@app.route("/add/form",methods=['GET', 'POST'])
-def add_book_form():
-    if request.method == 'POST':
-        name=request.form.get('name')
-        author=request.form.get('author')
-        published=request.form.get('published')
-        if name or author or published:
-            try:
-                book=Book(
-                    name=name,
-                    author=author,
-                    published=published
-                )
-                db.session.add(book)
-                db.session.commit()
-                return "Book with name {} added. book id={}".format(name, book.id)
-            except Exception as e:
-                return(str(e))
-        else:
-            return "empty fields!"
-    return render_template("getdata.html")
+# @app.route("/add/form",methods=['GET', 'POST'])
+# def add_book_form():
+#     if request.method == 'POST':
+#         name=request.form.get('name')
+#         author=request.form.get('author')
+#         published=request.form.get('published')
+#         if name or author or published:
+#             try:
+#                 book=Book(
+#                     name=name,
+#                     author=author,
+#                     published=published
+#                 )
+#                 db.session.add(book)
+#                 db.session.commit()
+#                 return "Book with name {} added. book id={}".format(name, book.id)
+#             except Exception as e:
+#                 return(str(e))
+#         else:
+#             return "empty fields!"
+#     return render_template("getdata.html")
 
 if __name__ == '__main__':
     app.run()

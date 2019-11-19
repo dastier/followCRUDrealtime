@@ -1,0 +1,60 @@
+version: '3.2'
+
+networks:
+  admin-panel-network:
+    driver: bridge
+
+
+services:
+  db:
+    container_name: testtask_1
+    image: testtask_1-postgres
+    restart: always
+    ports:
+      - 5433:5433
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: docker
+    networks:
+      - testtask_1-network
+
+
+  ap:
+    image: admin-panel-app:0.0.13-SNAPSHOT
+    container_name: installfrog-admin-panel
+    restart: always
+    ports:
+      - 80:9092
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      AWS_ACCESS_KEY_ID: AKIAVHKSQ2WGYVS3IYH4
+      AWS_SECRET_ACCESS_KEY: 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
+      DOWNLOAD_AWS_LINK: https://download.testing.installfrog.com
+      AWS_REGION: eu-central-1
+      AWS_BUCKET_NAME: download-testing-installfrog-com
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: installfrog@gmail.com
+      MAIL_PASSWORD: Wapmic-gejkik-8zugki
+      MAIL_PROTOCOL: smtp
+      COMMUNICATION_ADDRESS: 172.16.2.145
+      STAT_ADDRESS: 172.16.2.145
+      PORT: 9092
+      HTTPS_PORT: 9093
+      PASS_PHRASE: ololotrololo9voditelnlo
+      DB_NAME: dev
+      DB_HOST: db
+      DB_PORT: 5432
+      RECEIVER_EMAIL: contact@installfrog.com
+      GMAIL_CLIENT_ID: 757574545437-s5cikk1qknmv2scgl14ugbcib05ieunr.apps.googleusercontent.com
+      GMAIL_CLIENT_SECRET: 6YI0y5kiXP7vv_AcCDek6RMj
+      GMAIL_REFRESH_TOKEN: 1/3BBWOy8G8VknGrPeGlRKynWilSo2raofR0CKMsQYAIc
+      GMAIL_TOKEN_URL: https://www.googleapis.com/oauth2/v4/token
+      WHITE_PAGE_DOMAIN: www.cdnawsco.com,cdnawsco.com,secstatco.com,www.secstatco.com,18.185.210.227,52.58.57.98,18.196.55.211,52.58.83.63
+    depends_on:
+      - db
+    networks:
+      - admin-panel-network
+

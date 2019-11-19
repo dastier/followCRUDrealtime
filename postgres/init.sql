@@ -1,0 +1,15 @@
+CREATE OR REPLACE FUNCTION notify_event() RETURNS trigger AS
+$BODY$
+BEGIN
+  PERFORM pg_notify('events', row_to_json(NEW)::text);
+  RETURN new;
+END;
+$BODY$
+LANGUAGE 'plpgsql' VOLATILE COST 100;
+
+
+-- create trigger:
+
+CREATE TRIGGER notify_users_event
+AFTER INSERT OR UPDATE OR DELETE ON users
+  FOR EACH ROW EXECUTE PROCEDURE notify_event();
