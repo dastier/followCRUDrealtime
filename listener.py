@@ -1,5 +1,5 @@
-import os
 import multiprocessing
+import os
 import select
 
 import psycopg2
@@ -45,6 +45,18 @@ def worker(q):
     obj = q.get()
     obj.do_something()
 
+def listen(self):
+    queue = multiprocessing.Queue()
+
+    p = multiprocessing.Process(target=worker, args=(queue,))
+    p.start()
+
+    queue.put(MyFancyClass('Fancy Dan'))
+
+    # Wait for the worker to finish
+    queue.close()
+    queue.join_thread()
+    p.join()
 
 if __name__ == '__main__':
     queue = multiprocessing.Queue()

@@ -1,15 +1,18 @@
 import os
-from flask import Flask, request, jsonify, render_template
+
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-import listener
+
+# import listener
+from listener import listen
 
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
 from models import Book
+
 
 @app.route("/")
 def hello():
@@ -88,5 +91,5 @@ def get_by_id(id_):
 #     return render_template("getdata.html")
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    listener.listen()
+    app.run()

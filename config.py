@@ -8,6 +8,8 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'mysecretpassword'
+    HOST = '0.0.0.0'
+    PORT = os.environ['PORT']
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
 
