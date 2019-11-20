@@ -8,6 +8,7 @@ CREATE DATABASE dblog;
 
 # best example: https://citizen428.net/blog/asynchronous-notifications-in-postgres/
 
+docker-compose up --build
 
 works:
 
@@ -54,3 +55,5 @@ sudo apt-get install python3-psycopg2
 python manage.py db init
 python manage.py db migrate
 python manage.py db upgrade
+
+python manage.py runserver

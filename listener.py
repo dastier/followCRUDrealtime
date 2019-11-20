@@ -29,16 +29,16 @@ class MyFancyClass(object):
         curs = conn.cursor()
         curs.execute("LISTEN events;")
 
-        print "Waiting for notifications on channel 'events'"
+        print ("Waiting for notifications on channel 'events'")
         while True:
             if select.select([conn], [], [], 5) == ([], [], []):
-                print "Timeout"
+                print ("Timeout")
             else:
                 conn.poll()
                 while conn.notifies:
                     notify = conn.notifies.pop(0)
-                    print "Got NOTIFY:", notify.payload
-                    print 'Doing something with websockets here! in %s for %s!' % (proc_name, self.name)
+                    print ("Got NOTIFY:", notify.payload)
+                    print ('Doing something with websockets here! in %s for %s!' % (proc_name, self.name))
 
 
 def worker(q):
