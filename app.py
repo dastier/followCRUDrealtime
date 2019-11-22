@@ -1,10 +1,12 @@
 import os
+from multiprocessing import Process
+import select
 
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 # import listener
-from listener import listen
+import listener
 
 app = Flask(__name__)
 
@@ -13,6 +15,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 from models import Book
 
+
+listener.listen()
 
 @app.route("/")
 def hello():
@@ -91,5 +95,4 @@ def get_by_id(id_):
 #     return render_template("getdata.html")
 
 if __name__ == '__main__':
-    listener.listen()
     app.run()

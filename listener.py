@@ -39,13 +39,16 @@ class MyFancyClass(object):
                     notify = conn.notifies.pop(0)
                     print ("Got NOTIFY:", notify.payload)
                     print ('Doing something with websockets here! in %s for %s!' % (proc_name, self.name))
+                    f=open("/tmp/NOTIFY","a+")
+                    f.write(("notified! got: %s" % notify.payload))
+                    f.close()
 
 
 def worker(q):
     obj = q.get()
     obj.do_something()
 
-def listen(self):
+def listen():
     queue = multiprocessing.Queue()
 
     p = multiprocessing.Process(target=worker, args=(queue,))
@@ -54,19 +57,20 @@ def listen(self):
     queue.put(MyFancyClass('Fancy Dan'))
 
     # Wait for the worker to finish
+    print ("Wait for the worker to finish")
     queue.close()
     queue.join_thread()
-    p.join()
+    # p.join()
 
-if __name__ == '__main__':
-    queue = multiprocessing.Queue()
+# if __name__ == '__main__':
+    # queue = multiprocessing.Queue()
 
-    p = multiprocessing.Process(target=worker, args=(queue,))
-    p.start()
+    # p = multiprocessing.Process(target=worker, args=(queue,))
+    # p.start()
 
-    queue.put(MyFancyClass('Fancy Dan'))
+    # queue.put(MyFancyClass('Fancy Dan'))
 
-    # Wait for the worker to finish
-    queue.close()
-    queue.join_thread()
-    p.join()
+    # # Wait for the worker to finish
+    # queue.close()
+    # queue.join_thread()
+    # p.join()

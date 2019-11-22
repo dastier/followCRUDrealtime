@@ -57,3 +57,8 @@ python manage.py db migrate
 python manage.py db upgrade
 
 python manage.py runserver
+
+
+psql -h localhost -U postgres -d docker
+
+insert into users (name) values ('hello');
