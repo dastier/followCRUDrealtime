@@ -1,6 +1,6 @@
-import multiprocessing
 import os
 import select
+import threading
 
 import psycopg2
 import psycopg2.extensions
@@ -12,18 +12,23 @@ import psycopg2.extensions
 
 DATABASE_URI = os.environ['DATABASE_URL']
 
+class myThread (threading.Thread):
+   def __init__(self, name, counter):
+      threading.Thread.__init__(self)
+      self.name = name
+      self.counter = counter
+   def run(self):
+      print ("Starting %s" % self.name)
+      MyFancyClass.do_something(self)
+      print ("Exiting %s" % self.name)
+
 class MyFancyClass(object):
 
     def __init__(self, name):
         self.name = name
 
     def do_something(self):
-        proc_name = multiprocessing.current_process().name
-        # conn = psycopg2.connect(host=hostname, user=username,
-        #                         password=password, database=database)
         conn = psycopg2.connect(DATABASE_URI)
-
-
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
         curs = conn.cursor()
@@ -38,39 +43,7 @@ class MyFancyClass(object):
                 while conn.notifies:
                     notify = conn.notifies.pop(0)
                     print ("Got NOTIFY:", notify.payload)
-                    print ('Doing something with websockets here! in %s for %s!' % (proc_name, self.name))
-                    f=open("/tmp/NOTIFY","a+")
+                    print ('Doing something with websockets here! for %s!' % (self.name))
+                    f=open("/tmp/NOTIFY","w+")
                     f.write(("notified! got: %s" % notify.payload))
                     f.close()
-
-
-def worker(q):
-    obj = q.get()
-    obj.do_something()
-
-def listen():
-    queue = multiprocessing.Queue()
-
-    p = multiprocessing.Process(target=worker, args=(queue,))
-    p.start()
-
-    queue.put(MyFancyClass('Fancy Dan'))
-
-    # Wait for the worker to finish
-    print ("Wait for the worker to finish")
-    queue.close()
-    queue.join_thread()
-    # p.join()
-
-# if __name__ == '__main__':
-    # queue = multiprocessing.Queue()
-
-    # p = multiprocessing.Process(target=worker, args=(queue,))
-    # p.start()
-
-    # queue.put(MyFancyClass('Fancy Dan'))
-
-    # # Wait for the worker to finish
-    # queue.close()
-    # queue.join_thread()
-    # p.join()

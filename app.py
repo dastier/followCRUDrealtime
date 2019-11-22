@@ -1,5 +1,5 @@
 import os
-from multiprocessing import Process
+import threading
 import select
 
 from flask import Flask, jsonify, render_template, request
@@ -16,7 +16,8 @@ db = SQLAlchemy(app)
 from models import Book
 
 
-listener.listen()
+thread1 = listener.myThread(1, 1)
+thread1.start()
 
 @app.route("/")
 def hello():
