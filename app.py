@@ -1,9 +1,7 @@
 import os
-import select
-import threading
 
-from flask import Flask, jsonify, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify, request
+from flask_socketio import SocketIO
 
 import listener
 from models import Book, db
@@ -11,6 +9,7 @@ from models import Book, db
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
+socketio = SocketIO(app)
 db.init_app(app)
 
 thread1 = listener.myThread(1, 1)
@@ -67,6 +66,11 @@ def get_by_id(id_):
         return(str(e))
 
 
+# TODO: add update function
+
+def some_function():
+    SocketIO.emit('some event', {'data': 42})
+
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, debug=True)
