@@ -62,3 +62,23 @@ python manage.py runserver
 psql -h localhost -U postgres -d docker
 
 insert into users (name) values ('hello');
+DELETE FROM users where users.id = 12;
+
+UPDATE users
+SET name = 'John'
+WHERE
+   users.id = 31;
+
+
+notified! got: {"id":58,"name":"hello2"}
+
+
+
+docker=# insert into users (name) values ('hello');
+INSERT 0 1
+Asynchronous notification "events" with payload "{"operation" : "INSERT", "record" : {"id":13,"name":"hello"}}" received from server process with PID 83.
+
+
+
+
+
