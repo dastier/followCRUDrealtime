@@ -5,13 +5,11 @@ import threading
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
-# import listener
 import listener
 
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 from models import Book
 
@@ -65,27 +63,6 @@ def get_by_id(id_):
     except Exception as e:
         return(str(e))
 
-# @app.route("/add/form",methods=['GET', 'POST'])
-# def add_book_form():
-#     if request.method == 'POST':
-#         name=request.form.get('name')
-#         author=request.form.get('author')
-#         published=request.form.get('published')
-#         if name or author or published:
-#             try:
-#                 book=Book(
-#                     name=name,
-#                     author=author,
-#                     published=published
-#                 )
-#                 db.session.add(book)
-#                 db.session.commit()
-#                 return "Book with name {} added. book id={}".format(name, book.id)
-#             except Exception as e:
-#                 return(str(e))
-#         else:
-#             return "empty fields!"
-#     return render_template("getdata.html")
 
 if __name__ == '__main__':
     app.run()

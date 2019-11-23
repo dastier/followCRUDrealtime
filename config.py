@@ -11,6 +11,7 @@ class Config(object):
     HOST = '0.0.0.0'
     PORT = os.environ['PORT']
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProductionConfig(Config):
