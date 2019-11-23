@@ -1,5 +1,6 @@
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
 class Book(db.Model):
     __tablename__ = 'users'
