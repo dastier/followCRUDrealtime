@@ -1,7 +1,8 @@
 import os
 
-from flask import Flask, jsonify, request
-from flask_socketio import SocketIO
+from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 
 import listener
 from models import Book, db
@@ -10,6 +11,8 @@ app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 socketio = SocketIO(app)
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 db.init_app(app)
 
 thread1 = listener.myThread(1, 1)
@@ -18,7 +21,7 @@ thread1.start()
 
 @app.route("/")
 def hello():
-    return "Hello tier!"
+    return render_template('index.html')
 
 
 @app.route("/add")
@@ -68,8 +71,15 @@ def get_by_id(id_):
 
 # TODO: add update function
 
-def some_function():
-    SocketIO.emit('some event', {'data': 42})
+@socketio.on('connect')  # global namespace
+def handle_connect():
+    print('Client connected')
+
+
+@socketio.on('connect', namespace='/somevent')
+def handle_chat_connect():
+    print('Client connected to chat namespace')
+    emit('chat message', 'welcome!')
 
 
 if __name__ == '__main__':

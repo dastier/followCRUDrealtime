@@ -6,6 +6,6 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip3 install Flask flask_script flask_migrate flask-socketio psycopg2-binary
+RUN pip3 install -r requirements.txt
 
-ENTRYPOINT ["python3", "manage.py", "runserver"]
+ENTRYPOINT ["python3", "manage.py", "run"]

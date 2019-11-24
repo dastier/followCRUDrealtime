@@ -4,6 +4,8 @@ import threading
 
 import psycopg2
 import psycopg2.extensions
+from flask_cors import cross_origin
+from flask_socketio import SocketIO
 
 # hostname = 'localhost'
 # username = 'postgres'
@@ -12,15 +14,18 @@ import psycopg2.extensions
 
 DATABASE_URI = os.environ['DATABASE_URL']
 
+
 class myThread (threading.Thread):
-   def __init__(self, name, counter):
-      threading.Thread.__init__(self)
-      self.name = name
-      self.counter = counter
-   def run(self):
-      print ("Starting %s" % self.name)
-      MyFancyClass.do_something(self)
-      print ("Exiting %s" % self.name)
+    def __init__(self, name, counter):
+        threading.Thread.__init__(self)
+        self.name = name
+        self.counter = counter
+
+    def run(self):
+        print("Starting %s" % self.name)
+        MyFancyClass.do_something(self)
+        print("Exiting %s" % self.name)
+
 
 class MyFancyClass(object):
 
@@ -29,21 +34,27 @@ class MyFancyClass(object):
 
     def do_something(self):
         conn = psycopg2.connect(DATABASE_URI)
-        conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+        conn.set_isolation_level(
+            psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
         curs = conn.cursor()
         curs.execute("LISTEN events;")
 
-        print ("Waiting for notifications on channel 'events'")
+        print("Waiting for notifications on channel 'events'")
         while True:
             if select.select([conn], [], [], 5) == ([], [], []):
-                print ("Timeout")
+                print("Timeout")
             else:
                 conn.poll()
                 while conn.notifies:
                     notify = conn.notifies.pop(0)
-                    print ("Got NOTIFY:", notify.payload)
-                    print ('Doing something with websockets here! for %s!' % (self.name))
-                    f=open("/tmp/NOTIFY","w+")
+                    SocketIO.emit('somevent', {'data': 42})
+                    print("Got NOTIFY:", notify.payload)
+                    f = open("/tmp/NOTIFY", "w+")
                     f.write(("notified! got: %s" % notify.payload))
                     f.close()
+
+
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
+def send_stats():
+    SocketIO.send('somevent', {'data': 42})
