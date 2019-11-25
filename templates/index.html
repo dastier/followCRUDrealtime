@@ -4,7 +4,7 @@
     <title>Test socket.io</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
+    <!-- <script type="text/javascript" charset="utf-8">
         var socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on('connect', function () {
                 console.log('Websocket connected!');
@@ -16,10 +16,40 @@
         socket.on('message', function (msg) {
                 console.log(msg);
             });
+    </script> -->
+
+    <script type="application/javascript">
+
+        function init() {
+            var servermsg = document.getElementById("servermsg");
+            testWebSocket();
+        }
+
+        function testWebSocket() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on('connect', function () {
+                console.log('Websocket connected!');
+                servermsg.innerHTML = servermsg.innerHTML + "<br>Server connected";
+
+            });
+            socket.on('somevent', function (msg) {
+                console.log(msg);
+                servermsg.innerHTML = servermsg.innerHTML + "<br><< Recieved data: EMIT " + msg.data;
+            });
+
+            socket.on('message', function (msg) {
+                console.log(msg);
+                servermsg.innerHTML = servermsg.innerHTML + "<br><< Recieved data: SEND " + msg.data;
+            });
+
+        }
+
     </script>
 </head>
 
-<body>
+<body onload="init();">
+    <div id="servermsg"><h1>Connecting to the app...</h1></p>
+
 
 </body>
 
