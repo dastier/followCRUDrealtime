@@ -8,8 +8,12 @@
         var socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on('connect', function () {
                 console.log('Websocket connected!');
+                socket.emit('somevent', "this is a test");
             });
         socket.on('somevent', function (msg) {
+                console.log(msg);
+            });
+        socket.on('message', function (msg) {
                 console.log(msg);
             });
     </script>

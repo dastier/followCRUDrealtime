@@ -4,13 +4,6 @@ import threading
 
 import psycopg2
 import psycopg2.extensions
-from flask_cors import cross_origin
-from flask_socketio import SocketIO
-
-# hostname = 'localhost'
-# username = 'postgres'
-# password = 'mysecretpassword'
-# database = 'postgres'
 
 DATABASE_URI = os.environ['DATABASE_URL']
 
@@ -33,6 +26,7 @@ class MyFancyClass(object):
         self.name = name
 
     def do_something(self):
+        from app import send_mymsg
         conn = psycopg2.connect(DATABASE_URI)
         conn.set_isolation_level(
             psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
@@ -48,13 +42,8 @@ class MyFancyClass(object):
                 conn.poll()
                 while conn.notifies:
                     notify = conn.notifies.pop(0)
-                    SocketIO.emit('somevent', {'data': 42})
+                    send_mymsg()
                     print("Got NOTIFY:", notify.payload)
                     f = open("/tmp/NOTIFY", "w+")
                     f.write(("notified! got: %s" % notify.payload))
                     f.close()
-
-
-@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
-def send_stats():
-    SocketIO.send('somevent', {'data': 42})
