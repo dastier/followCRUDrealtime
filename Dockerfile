@@ -1,11 +1,13 @@
 FROM python:3.8.0
 
+LABEL Author="Aliaksei Piatrouski"
+
 RUN mkdir /app
 
 WORKDIR /app
 
 COPY . /app
 
-RUN pip3 install -r requirements.txt
+RUN chmod u+x ./entrypoint.sh
 
-ENTRYPOINT ["python3", "manage.py", "run"]
+ENTRYPOINT ["./entrypoint.sh"]

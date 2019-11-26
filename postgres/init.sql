@@ -6,16 +6,37 @@ create table "users"
 
 CREATE OR REPLACE FUNCTION notify_event() RETURNS trigger AS
 $BODY$
+
+DECLARE
+  subj text;
+
 BEGIN
-  PERFORM pg_notify(
-    'events',
-    json_build_object(
-      'operation', TG_OP,
-      'record', row_to_json(NEW)
-    )::text
-  );
-  RETURN new;
+  IF (TG_OP = 'DELETE') THEN
+    PERFORM pg_notify(
+      'events',
+      json_build_object(
+        'operation', TG_OP,
+        'record', row_to_json(OLD)
+      )::text
+    );
+  ELSE
+    PERFORM pg_notify(
+      'events',
+      json_build_object(
+        'operation', TG_OP,
+        'record', row_to_json(NEW)
+      )::text
+    );
+  END IF;
+
+  RETURN NEW;
+  
 END;
+
+
+
+
+
 $BODY$
 LANGUAGE 'plpgsql' VOLATILE COST 100;
 

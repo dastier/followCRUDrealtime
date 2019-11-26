@@ -42,7 +42,7 @@ class MyFancyClass(object):
                 conn.poll()
                 while conn.notifies:
                     notify = conn.notifies.pop(0)
-                    send_mymsg()
+                    send_mymsg(notify.payload)
                     print("Got NOTIFY:", notify.payload)
                     f = open("/tmp/NOTIFY", "w+")
                     f.write(("notified! got: %s" % notify.payload))

@@ -1,16 +1,17 @@
 import os
 
+import listener
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from flask_socketio import SocketIO
-
-import listener
 from models import Book, db
 
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 socketio = SocketIO(app, async_mode='threading')
+
+
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 db.init_app(app)
@@ -74,14 +75,16 @@ def get_by_id(id_):
 def handle_connect():
     print('Client connected')
     socketio.emit('somevent', {'emit': 42})
-    socketio.send({'send': 42})
+    socketio.send("{'send': 42}")
 
 
-def send_mymsg():
+def send_mymsg(msg):
     with app.test_request_context('/'):
-        socketio.emit('somevent', {'sendddd_EMIT': 4442}, namespace='/')
+        # socketio.emit('somevent', "{'sendddd_EMIT': 4442}", namespace='/')
+        socketio.emit('somevent', msg, namespace='/')
         socketio.send({'sendddd_SEND': 4442}, namespace='/')
 
 
 if __name__ == '__main__':
-    socketio.run(app, threaded=True, debug=True)
+    # socketio.run(app, threaded=True, debug=True)
+    socketio.run(app)

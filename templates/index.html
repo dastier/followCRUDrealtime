@@ -34,12 +34,12 @@
             });
             socket.on('somevent', function (msg) {
                 console.log(msg);
-                servermsg.innerHTML = servermsg.innerHTML + "<br><< Recieved data: EMIT " + msg.data;
+                servermsg.innerHTML = servermsg.innerHTML + "<br><< Recieved data: EMIT " + msg;
             });
 
             socket.on('message', function (msg) {
                 console.log(msg);
-                servermsg.innerHTML = servermsg.innerHTML + "<br><< Recieved data: SEND " + msg.data;
+                servermsg.innerHTML = servermsg.innerHTML + "<br><< Recieved data: SEND " + msg;
             });
 
         }
@@ -48,7 +48,7 @@
 </head>
 
 <body onload="init();">
-    <div id="servermsg"><h1>Connecting to the app...</h1></p>
+    <div id="servermsg"><h1>Connecting to the app...</h1><p>CHNAGE HERE!</p>
 
 
 </body>
