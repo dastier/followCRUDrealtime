@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 
 import listener
-from models import Book, db
+from models import User, db
 
 app = Flask(__name__)
 
@@ -32,21 +32,21 @@ def add_user():
     name = request.args.get('name')
 
     try:
-        book = Book(
+        user = User(
             name=name
         )
-        db.session.add(book)
+        db.session.add(user)
         db.session.commit()
-        return "User with name {} added. user id={}".format(name, book.id)
+        return "User with name {} added. user id={}".format(name, user.id)
     except Exception as e:
         return(str(e))
 
 
 @app.route("/del/<int:id_>", methods=['DELETE'])
 def del_user(id_):
-    if Book.query.filter_by(id=id_).first():
+    if User.query.filter_by(id=id_).first():
         try:
-            Book.query.filter_by(id=id_).delete()
+            User.query.filter_by(id=id_).delete()
             db.session.commit()
             return "User with id {} deleted".format(id_)
         except Exception as e:
@@ -58,8 +58,8 @@ def del_user(id_):
 @app.route("/getall", methods=['GET'])
 def get_all():
     try:
-        books = Book.query.all()
-        return jsonify([e.serialize() for e in books])
+        users = User.query.all()
+        return jsonify([e.serialize() for e in users])
     except Exception as e:
         return(str(e))
 
@@ -67,24 +67,18 @@ def get_all():
 @app.route("/get/<int:id_>", methods=['GET'])
 def get_by_id(id_):
     try:
-        book = Book.query.filter_by(id=id_).first()
-        return jsonify(book.serialize())
+        user = User.query.filter_by(id=id_).first()
+        return jsonify(user.serialize())
     except Exception as e:
         return(str(e))
 
 
 # TODO: add update function
 
-@socketio.on('connect', namespace='/')  # global namespace
-def handle_connect():
-    print('Client connected')
-    socketio.emit('somevent', {'emit': 42})
-    socketio.send("{'send': 42}")
-
 
 def send_mymsg(msg):
     with app.test_request_context('/'):
-        socketio.emit('somevent', msg, namespace='/')
+        socketio.emit('testtask1', msg, namespace='/')
 
 
 if __name__ == '__main__':

@@ -2,7 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class Book(db.Model):
+
+class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -11,12 +12,10 @@ class Book(db.Model):
     def __init__(self, name):
         self.name = name
 
-
     def __repr__(self):
         return '<id {}>'.format(self.id)
-    
+
     def serialize(self):
         return {
-            'id': self.id, 
-            'name': self.name,
+            'id': self.id, 'name': self.name,
         }
