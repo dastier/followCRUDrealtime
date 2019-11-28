@@ -1,7 +1,7 @@
 import json
 
 
-def generate_user_message(msg):
+def generate_op_message(msg):
     payload_dict = json.loads(msg)
 
     if payload_dict['operation'] == 'INSERT':

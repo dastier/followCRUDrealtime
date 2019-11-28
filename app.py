@@ -42,7 +42,7 @@ def add_user():
         return(str(e))
 
 
-@app.route("/update/<id_>", methods=['UPDATE'])
+@app.route("/update/<id_>", methods=['PUT'])
 def update_user(id_):
     name = request.args.get('name')
     if User.query.filter_by(id=id_).first():
@@ -56,7 +56,7 @@ def update_user(id_):
         return "User with id {} does not exist".format(id_)
 
 
-@app.route("/del/<int:id_>", methods=['DELETE'])
+@app.route("/delete/<int:id_>", methods=['DELETE'])
 def del_user(id_):
     if User.query.filter_by(id=id_).first():
         try:
@@ -70,7 +70,7 @@ def del_user(id_):
 
 
 @app.route("/users", methods=['GET'])
-def get_all():
+def get_users():
     try:
         users = User.query.all()
         return jsonify([e.serialize() for e in users])
@@ -87,10 +87,7 @@ def get_by_id(id_):
         return(str(e))
 
 
-# TODO: add update function
-
-
-def send_mymsg(msg):
+def send_op_msg(msg):
     with app.test_request_context('/'):
         socketio.emit('testtask1', msg, namespace='/')
 
