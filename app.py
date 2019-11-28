@@ -42,6 +42,20 @@ def add_user():
         return(str(e))
 
 
+@app.route("/update/<id_>", methods=['UPDATE'])
+def update_user(id_):
+    name = request.args.get('name')
+    if User.query.filter_by(id=id_).first():
+        try:
+            User.query.filter_by(id=id_).update({"name": name})
+            db.session.commit()
+            return "User with id {} updated".format(id_)
+        except Exception as e:
+            return(str(e))
+    else:
+        return "User with id {} does not exist".format(id_)
+
+
 @app.route("/del/<int:id_>", methods=['DELETE'])
 def del_user(id_):
     if User.query.filter_by(id=id_).first():
@@ -55,7 +69,7 @@ def del_user(id_):
         return "User with id {} does not exist".format(id_)
 
 
-@app.route("/getall", methods=['GET'])
+@app.route("/users", methods=['GET'])
 def get_all():
     try:
         users = User.query.all()
@@ -64,7 +78,7 @@ def get_all():
         return(str(e))
 
 
-@app.route("/get/<int:id_>", methods=['GET'])
+@app.route("/user/<int:id_>", methods=['GET'])
 def get_by_id(id_):
     try:
         user = User.query.filter_by(id=id_).first()
