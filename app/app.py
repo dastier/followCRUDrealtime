@@ -52,6 +52,8 @@ def update_user(id_):
         try:
             User.query.filter_by(id=id_).update({"name": name})
             db.session.commit()
+            app.logger.info(
+                "User with id %s updated. Got new name: %s" % (id_, name))
             return "User with id %s updated" % (id_), 200
         except Exception as e:
             app.logger.error(str(e))
