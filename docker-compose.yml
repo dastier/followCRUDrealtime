@@ -40,7 +40,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       DATABASE_URL: "postgresql://postgres:postgres@db/docker"
-      APP_SETTINGS: config.DevelopmentConfig
+      APP_SETTINGS: config.ProductionConfig
 
     depends_on:
       - db

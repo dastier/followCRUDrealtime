@@ -1,7 +1,6 @@
+from app import app, socketio
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server
-
-from app import app, socketio
 from models import db
 
 migrate = Migrate(app, db)
