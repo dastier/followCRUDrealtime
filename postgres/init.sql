@@ -19,6 +19,7 @@ BEGIN
         'record', row_to_json(OLD)
       )::text
     );
+    RETURN OLD;
   ELSE
     PERFORM pg_notify(
       'events',
@@ -44,6 +45,6 @@ LANGUAGE 'plpgsql' VOLATILE COST 100;
 -- create trigger:
 
 CREATE TRIGGER notify_users_event
-BEFORE INSERT OR UPDATE OR DELETE ON users
+AFTER INSERT OR UPDATE OR DELETE ON users
   FOR EACH ROW
   EXECUTE PROCEDURE notify_event();

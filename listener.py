@@ -4,7 +4,6 @@ import threading
 
 import psycopg2
 import psycopg2.extensions
-
 from utils import generate_op_message
 
 DATABASE_URI = os.environ['DATABASE_URL']
@@ -38,7 +37,7 @@ class Listener(object):
         print("Waiting for notifications on channel 'events'")
         while True:
             if select.select([conn], [], [], 5) == ([], [], []):
-                print("Timeout")
+                pass
             else:
                 conn.poll()
                 while conn.notifies:
