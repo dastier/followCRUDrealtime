@@ -38,8 +38,8 @@ curl --request GET --url 'http://127.0.0.1:5000/user/7'
 2. run the following commands:
 
 ```sh
-  $ git clone https://github.com/dastier/pyTestTask.git
-  $ cd pyTestTask/
+  $ git clone https://github.com/dastier/followCRUDrealtime.git
+  $ cd followCRUDrealtime/
   $ docker-compose up --build
 ```
 
