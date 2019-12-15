@@ -4,7 +4,6 @@ networks:
   testtask_1-network:
     driver: bridge
 
-
 services:
   db:
     build:
@@ -22,7 +21,6 @@ services:
     networks:
       - testtask_1-network
 
-
   ap:
     build:
       context: .
@@ -33,15 +31,10 @@ services:
     ports:
       - 5000:5000
     environment:
-      DB_USER: postgres
-      DB_PASSWORD: postgres
       PORT: 5000
-      DB_NAME: docker
-      DB_HOST: db
-      DB_PORT: 5432
+
       DATABASE_URL: "postgresql://postgres:postgres@db/docker"
       APP_SETTINGS: config.ProductionConfig
-
     depends_on:
       - db
     networks:
